@@ -1,0 +1,97 @@
+﻿<style type="text/css">
+    .card {
+        width: 60%;
+        margin-left: 20%;
+        margin-top: 5%
+    }
+</style>
+
+<div class="card">
+    <div class="card-header">
+        <h2>User Login</h2>
+    </div>
+    <div class="card-body">
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="form-group">
+                    <label>Username</label>
+                    <input class="form-control" id="txtusername" />
+                </div>
+            </div>
+            <div class="col-lg-12">
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" class="form-control" id="txtpwd" />
+                </div>
+            </div>
+          
+        </div>
+    </div>
+    <div class="card-footer">
+        <a onclick="ProceedLogin()" class="btn btn-primary">Login</a>
+    </div>
+
+
+</div>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript">
+
+    var js = jQuery.noConflict(true);
+
+
+    function ProceedLogin() {
+
+        var isproceed = true;
+
+        var _user = $('#txtusername');
+        var _pwd = $('#txtpwd');
+       
+
+        var user = _user.val();
+        var pwd = _pwd.val();
+       
+        if (user == null || user == '') {
+            _user.css('border-color', 'red');
+            isproceed = false;
+        } else {
+            _user.css('border-color', '#ccc');
+        }
+        if (pwd == null || pwd == '') {
+            _pwd.css('border-color', 'red');
+            isproceed = false;
+        } else {
+            _pwd.css('border-color', '#ccc');
+        }
+        if (isproceed) {
+
+            var _obj = new Object();
+
+            _obj.username = user;
+            _obj.password = pwd;
+           
+
+            $.ajax({
+                type: 'POST',
+                url: 'https://localhost:7143/api/Authorize/GenerateToken',
+                data: JSON.stringify(_obj),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    if(data!=null){
+                        localStorage.setItem('token', data.token);
+                        window.location.href='/customer'
+                    }
+                   
+                },
+                failure: function (error) {
+
+                }
+            })
+
+        }
+
+
+    }
+</script>
